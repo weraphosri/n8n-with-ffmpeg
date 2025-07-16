@@ -1,20 +1,26 @@
-# ใช้ official n8n image ที่มี n8n ติดตั้งอยู่แล้ว
-FROM n8nio/n8n:latest
+FROM node:20-alpine
 
-# สลับเป็น root เพื่อติดตั้ง ffmpeg
-USER root
+WORKDIR /app
+
+# Clone repo (หรือ COPY . /app ถ้า build จากโฟลเดอร์)
+COPY . /app
+
+# Install deps
+RUN npm ci --legacy-peer-deps
+
+# Build n8n
+RUN npm run build
 
 # ติดตั้ง ffmpeg
 RUN apk update && apk add --no-cache ffmpeg
 
-# กลับมาใช้ node user
-USER node
-
-# Port ที่ n8n ใช้
+# Expose port
 EXPOSE 5678
 
-# ใช้ entrypoint เดิมของ n8n image
-ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
+# แนะนำให้ใช้ tini (กัน zombie process)
+RUN apk add --no-cache tini
+ENTRYPOINT ["/sbin/tini", "--"]
 
-# ใช้ n8n command เดิมของ official image
+# Start n8n
+USER node
 CMD ["n8n"]
