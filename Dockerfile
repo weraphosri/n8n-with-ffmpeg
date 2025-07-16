@@ -1,12 +1,13 @@
 FROM n8nio/n8n:latest
 USER root
-RUN apk update && apk add --no-cache ffmpeg fontconfig
+RUN apk update && apk add --no-cache ffmpeg fontconfig wget
 
-# ดาวน์โหลดฟอนต์ไทยโดยตรง
-RUN mkdir -p /usr/share/fonts/truetype/thai
-RUN wget -O /usr/share/fonts/truetype/thai/TH-Sarabun-New.ttf \
-    https://github.com/wongnai/wongnai-fonts/raw/master/fonts/TH-Sarabun-New.ttf
-RUN fc-cache -fv
+# ติดตั้งฟอนต์ไทยจาก Google Fonts
+RUN mkdir -p /usr/share/fonts/truetype/thai && \
+    cd /usr/share/fonts/truetype/thai && \
+    wget -O NotoSansThai.ttf "https://github.com/google/fonts/raw/main/ofl/notosansthai/NotoSansThai%5Bwdth%2Cwght%5D.ttf" && \
+    wget -O Sarabun-Regular.ttf "https://github.com/google/fonts/raw/main/ofl/sarabun/Sarabun-Regular.ttf" && \
+    fc-cache -fv
 
 USER node
 EXPOSE 5678
