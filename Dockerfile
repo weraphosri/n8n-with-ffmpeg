@@ -1,26 +1,10 @@
-FROM node:20-alpine
+FROM n8nio/n8n:latest
 
-WORKDIR /app
-
-# Clone repo (หรือ COPY . /app ถ้า build จากโฟลเดอร์)
-COPY . /app
-
-# Install deps
-RUN npm ci --legacy-peer-deps
-
-# Build n8n
-RUN npm run build
-
-# ติดตั้ง ffmpeg
+USER root
 RUN apk update && apk add --no-cache ffmpeg
+USER node
 
-# Expose port
 EXPOSE 5678
 
-# แนะนำให้ใช้ tini (กัน zombie process)
-RUN apk add --no-cache tini
-ENTRYPOINT ["/sbin/tini", "--"]
-
-# Start n8n
-USER node
+ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
 CMD ["n8n"]
