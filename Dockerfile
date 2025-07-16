@@ -1,7 +1,5 @@
 FROM n8nio/n8n:latest
 USER root
-RUN apk update && apk add --no-cache ffmpeg #force-rebuild-20240716-v9
+RUN apk update && apk add --no-cache ffmpeg
 USER node
 EXPOSE 5678
-RUN ffmpeg -version
-RUN apk update && apk add --no-cache ffmpeg
