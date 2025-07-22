@@ -1,24 +1,23 @@
 FROM n8nio/n8n:latest
 USER root
 
-# ติดตั้ง fontconfig, wget, และฟอนต์ fallback (อังกฤษ)
+# ติดตั้งโปรแกรมพื้นฐาน
 RUN apk update && apk add --no-cache \
     fontconfig \
     wget \
     ttf-dejavu \
     && rm -rf /var/cache/apk/*
 
-# สร้างไดเรกทอรีฟอนต์
-RUN mkdir -p /usr/share/fonts/truetype/sarabun
-RUN mkdir -p /usr/share/fonts/truetype/notosans
+# สร้างโฟลเดอร์เก็บฟอนต์
+RUN mkdir -p /usr/share/fonts/truetype/sarabun /usr/share/fonts/truetype/notosans
 
-# คัดลอกฟอนต์ TH Sarabun (ต้องเปลี่ยนชื่อไฟล์ให้ไม่มีเว้นวรรคใน repo ก่อน)
-COPY THSarabunNew.ttf /usr/share/fonts/truetype/sarabun/
-COPY THSarabunNew-Bold.ttf /usr/share/fonts/truetype/sarabun/
-COPY THSarabunNew-Italic.ttf /usr/share/fonts/truetype/sarabun/
-COPY THSarabunNew-BoldItalic.ttf /usr/share/fonts/truetype/sarabun/
+# ดาวน์โหลดฟอนต์ Sarabun จาก GitHub (จาก repo ของคุณเอง)
+RUN wget -q https://raw.githubusercontent.com/weraphosri/n8n-with-ffmpeg/main/THSarabunNew.ttf -O /usr/share/fonts/truetype/sarabun/THSarabunNew.ttf && \
+    wget -q https://raw.githubusercontent.com/weraphosri/n8n-with-ffmpeg/main/THSarabunNew-Bold.ttf -O /usr/share/fonts/truetype/sarabun/THSarabunNew-Bold.ttf && \
+    wget -q https://raw.githubusercontent.com/weraphosri/n8n-with-ffmpeg/main/THSarabunNew-Italic.ttf -O /usr/share/fonts/truetype/sarabun/THSarabunNew-Italic.ttf && \
+    wget -q https://raw.githubusercontent.com/weraphosri/n8n-with-ffmpeg/main/THSarabunNew-BoldItalic.ttf -O /usr/share/fonts/truetype/sarabun/THSarabunNew-BoldItalic.ttf
 
-# ดาวน์โหลดฟอนต์ Noto Sans Thai จาก GitHub
+# ดาวน์โหลดฟอนต์ Noto Sans Thai
 RUN wget -q https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansThai/NotoSansThai-Regular.ttf \
     -O /usr/share/fonts/truetype/notosans/NotoSansThai-Regular.ttf
 
