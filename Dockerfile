@@ -27,7 +27,7 @@ RUN wget -O /usr/share/fonts/truetype/thai/TF-Pimpakarn-Extra-lta.ttf \
     "https://github.com/weraphosri/n8n-with-ffmpeg/raw/main/THSarabunNew%20BoldItalic.ttf" && \
     wget -O /usr/share/fonts/truetype/thai/THSarabunNew_Italic.ttf \
     "https://github.com/weraphosri/n8n-with-ffmpeg/raw/main/THSarabunNew%20Italic.ttf"
-
+ 
 # อัพเดต font cache
 RUN fc-cache -fv
 
